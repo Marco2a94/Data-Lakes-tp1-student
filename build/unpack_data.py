@@ -11,6 +11,7 @@ def unpack_data(input_dir, output_file):
     """
 
     # Step 1: Initialize an empty list to store DataFrames
+    dataframes = []
 
     # Step 2: Loop over files in the input directory
 
