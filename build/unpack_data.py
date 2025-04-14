@@ -23,11 +23,8 @@ def unpack_data(input_dir, output_file):
             df = pd.read_csv(os.path.join(input_dir, filename), index_col=0)
 
             # Step 5: Append the DataFrame to the list
+            dataframes.append(df)
             
-        # Step 4: Read the CSV file using pandas
-        
-        # Step 5: Append the DataFrame to the list
-
     # Step 6: Concatenate all DataFrames
 
     # Step 7: Save the combined DataFrame to output_file
