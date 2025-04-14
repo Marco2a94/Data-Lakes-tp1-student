@@ -17,7 +17,7 @@ def unpack_data(input_dir, output_file):
     for filename in os.listdir(input_dir):
 
         # Step 3: Check if the file is a CSV or matches a naming pattern
-        if filename.endswith('.csv'):
+        if filename.endswith('.csv') or filename.startswith('data-'):
 
             # Step 4: Read the CSV file using pandas
             df = pd.read_csv(os.path.join(input_dir, filename), index_col=0)
