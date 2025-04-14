@@ -12,13 +12,17 @@ def unpack_data(input_dir, output_file):
 
     # Step 1: Initialize an empty list to store DataFrames
     dataframes = []
-
     # Step 2: Loop over files in the input directory
-
+    for filename in os.listdir(input_dir):
+        
         # Step 3: Check if the file is a CSV or matches a naming pattern
 
-        # Step 4: Read the CSV file using pandas
+            # Step 4: Read the CSV file using pandas
 
+            # Step 5: Append the DataFrame to the list
+            
+        # Step 4: Read the CSV file using pandas
+        
         # Step 5: Append the DataFrame to the list
 
     # Step 6: Concatenate all DataFrames
