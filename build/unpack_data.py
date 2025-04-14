@@ -24,12 +24,13 @@ def unpack_data(input_dir, output_file):
 
             # Step 5: Append the DataFrame to the list
             dataframes.append(df)
-            
+
     # Step 6: Concatenate all DataFrames
+    combined_df = pd.concat(dataframes, ignore_index=True)
 
     # Step 7: Save the combined DataFrame to output_file
-
-    pass
+    combined_df.to_csv(output_file, index=False)
+    
 
 
 if __name__ == "__main__":
