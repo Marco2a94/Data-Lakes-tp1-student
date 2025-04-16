@@ -100,11 +100,23 @@ def preprocess_data(data_file, output_dir):
 
     # Step 5: Convert index lists to numpy arrays
 
-    
+    train_indices = np.array(train_indices)
+    dev_indices = np.array(dev_indices)
+    test_indices = np.array(test_indices)
 
     # Step 6: Create DataFrames from the selected indices
 
+    train_df = data.loc[train_indices]
+    dev_df = data.loc[dev_indices]
+    test_df = data.loc[test_indices]
+
     # Step 7: Drop unused columns: family_id, sequence_name, etc.
+
+    cols_to_drop = ['family_id', 'sequence_name', 'family_accession']
+    for df in [train_df, dev_df, test_df]:
+        for col in cols_to_drop:
+            if col in df.columns:
+                df.drop(columns=col, inplace=True)
 
     # Step 8: Save train/dev/test datasets as CSV
     # df.to_csv(...)
