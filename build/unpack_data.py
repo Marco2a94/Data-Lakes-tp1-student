@@ -15,19 +15,19 @@ def unpack_data(input_dir, output_file):
 
     # Step 2: Loop over files in the input directory
     for filename in os.listdir(input_dir):
-        print("---filename:", filename)
+        # print("---filename:", filename)
         # Step 3: Check if the file is a CSV or matches a naming pattern
         if filename.endswith(".csv") or filename.startswith("data-"):
 
             # Step 4: Read the CSV file using pandas
             df = pd.read_csv(os.path.join(input_dir, filename), index_col=0)
-            print("--- head of df:\n", df.head())
+            # print("--- head of df:\n", df.head())
             # Step 5: Append the DataFrame to the list
             dataframes.append(df)
 
     # Step 6: Concatenate all DataFrames
     combined_df = pd.concat(dataframes, axis=0, join="outer")
-    print(f"--- combined df \n{combined_df}")
+    # print(f"--- combined df \n{combined_df}")
     # Step 7: Save the combined DataFrame to output_file
     combined_df.to_csv(output_file, index=False)
     
