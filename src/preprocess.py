@@ -85,19 +85,6 @@ def preprocess_data(data_file, output_dir):
             dev_indices.extend(temp_dev.index.tolist())
             test_indices.extend(temp_test.index.tolist())
 
-    # Saving preprocessed datasets
-
-    data.loc[train_indices].to_csv(f"{output_dir}/train.csv")
-    data.loc[dev_indices].to_csv(f"{output_dir}/dev.csv")
-    data.loc[test_indices].to_csv(f"{output_dir}/test.csv")
-
-    # Compute and save class weights
-    class_counts = data.loc[train_indices, 'class_encoded'].value_counts()
-    total = class_counts.sum()
-    class_weights = {cls : total/count for cls, count in class_counts.items()}
-
-    joblib.dump(class_weights, f"{output_dir}/class_weights.joblib")
-
     # Step 5: Convert index lists to numpy arrays
 
     train_indices = np.array(train_indices)
@@ -124,13 +111,16 @@ def preprocess_data(data_file, output_dir):
     test_df.to_csv(f"{output_dir}/test.csv", index=False)
 
     # Step 9: Calculate class weights from the training set
-    # class_counts = ...
-    # class_weights = ...
+    class_counts = data.loc[train_indices, 'class_encoded'].value_counts()
+    total = class_counts.sum()
+    class_weights = {cls : total/count for cls, count in class_counts.items()}
 
     # Step 10: Normalize weights and scale
-
+    max_weight = max(class_weights.values())
+    class_weights = {cls: weight / max_weight for cls, weight in class_weights.items()}
+    
     # Step 11: Save the class weights
-    # with open(...)
+    joblib.dump(class_weights, f"{output_dir}/class_weights.joblib")
 
     pass
 
