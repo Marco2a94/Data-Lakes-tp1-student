@@ -119,7 +119,9 @@ def preprocess_data(data_file, output_dir):
                 df.drop(columns=col, inplace=True)
 
     # Step 8: Save train/dev/test datasets as CSV
-    # df.to_csv(...)
+    train_df.to_csv(f"{output_dir}/train.csv", index=False)
+    dev_df.to_csv(f"{output_dir}/dev.csv", index=False)
+    test_df.to_csv(f"{output_dir}/test.csv", index=False)
 
     # Step 9: Calculate class weights from the training set
     # class_counts = ...
