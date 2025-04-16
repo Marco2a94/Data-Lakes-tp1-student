@@ -27,20 +27,22 @@ def preprocess_data(data_file, output_dir):
 
     # Step 1: Load the data
     print('Loading Data')
-    # data = pd.read_csv(...)
+    data = pd.read_csv(data_file, index_col=0)
 
     # Step 2: Handle missing values
-    # data = data.dropna()
+    data = data.dropna()
 
     # Step 3: Encode the 'family_accession' to numeric labels
-    # label_encoder = LabelEncoder()
-    # data['class_encoded'] = label_encoder.fit_transform(...)
+    label_encoder = LabelEncoder()
+    data['class_encoded'] = label_encoder.fit_transform(data['family_accession'])
 
     # Save the label encoder
-    # joblib.dump(...)
+    joblib.dump(label_encoder, 'label_encoder.joblib')
 
     # Save the label mapping to a text file
-    # with open(...)
+    with open('label_mapping.txt', 'w', encoding='utf-8') as f:
+        for class_label, encoded_value in zip(label_encoder.classes_, range(len(label_encoder.classes_))):
+            f.write(f"{class_label} => {encoded_value}\n")
 
     # Step 4: Distribute data
     # For each unique class:
@@ -50,9 +52,40 @@ def preprocess_data(data_file, output_dir):
     # - Else: stratified split (train/dev/test)
 
     print("Distributing data")
-    # for cls in tqdm.tqdm(...):
+
+    train_indices = []
+    dev_indices = []
+    test_indices = []
+
+    class_counts = data['class_encoded'].value_counts()
+
+    for cls in tqdm.tqdm(class_counts.index):
+        cls_indices = data[data['class_encoded'] == cls].index.tolist()
+        count = len(cls_indices)
 
         # Logic for assigning indices to train/dev/test
+        if count == 1:
+            test_indices.extend(cls_indices)
+        
+        elif count == 2:
+            dev_indices.append(cls_indices[0])
+            test_indices.append(cls_indices[1])
+        
+        elif count == 3:
+            train_indices.append(cls_indices[0])
+            dev_indices.append(cls_indices[1])
+            test_indices.append(cls_indices[2])
+
+        else:
+            cls_data = data.loc[cls_indices]
+            temp_train, temp_test = train_test_split(cls_data, test_size=0.2, stratify=cls_data['class_encoded'], random_state=42)
+            temp_train, temp_dev = train_test_split(temp_train, test_size=0.25, stratify=temp_train['class_encoded'], random_state=42)
+
+            train_indices.extend(temp_train.index.tolist())
+            dev_indices.extend(temp_dev.index.tolist())
+            test_indices.extend(temp_test.index.tolist())
+
+    
 
     # Step 5: Convert index lists to numpy arrays
 
