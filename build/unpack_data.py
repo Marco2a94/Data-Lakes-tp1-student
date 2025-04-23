@@ -29,7 +29,7 @@ def unpack_data(input_dir, output_file):
     combined_df = pd.concat(dataframes, axis=0, join="outer")
     # print(f"--- combined df \n{combined_df}")
     # Step 7: Save the combined DataFrame to output_file
-    combined_df.to_csv(output_file, index=False)
+    combined_df.to_csv(output_file)
     
 
 
